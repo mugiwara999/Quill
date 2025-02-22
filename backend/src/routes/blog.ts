@@ -46,8 +46,6 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.get("/:id", async (c) => {
 
-
-
   const prisma = getPrismaClient(c)
 
   try {
