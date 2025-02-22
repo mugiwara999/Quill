@@ -19,13 +19,12 @@ model User {
   email    String @unique
   name     String
   password String
-  posts    Post[]
+  blogs    Blog[]
 }
 
-model Post {
+model Blog {
   id        String  @id @default(uuid())
   author    User    @relation(fields: [authorId], references: [id])
-  userId    String?
   authorId  String
   published Boolean @default(false)
   title     String
