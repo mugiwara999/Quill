@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge"
 import { decode, verify } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
+import { createBlog, updateBlog } from "@rahulkoyye/medium-common";
 
 export const blogRouter = new Hono<{
   Bindings: {
@@ -47,7 +48,26 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post("/", async (c) => {
 
-  const body = await c.req.json()
+  let body;
+  try {
+
+    body = await c.req.json()
+  } catch (e) {
+    c.status(411)
+    return c.json({
+      err: "body parsing error"
+    })
+  }
+
+  const parsed = createBlog.safeParse(body);
+
+  if (!parsed.success) {
+
+    c.status(411)
+    return c.json({
+      msg: "send the right inputs"
+    })
+  }
   const id = c.get("userId")
   const prisma = getPrismaClient(c)
 
@@ -70,7 +90,27 @@ blogRouter.post("/", async (c) => {
 
 blogRouter.put("/", async (c) => {
 
-  const body = await c.req.json()
+  let body;
+  try {
+
+    const body = await c.req.json()
+
+  } catch (e) {
+
+    return c.json({
+      err: "body parsing error"
+    })
+  }
+
+  const parsed = updateBlog.safeParse(body);
+
+  if (!parsed.success) {
+
+    c.status(411)
+    return c.json({
+      msg: "send the right inputs"
+    })
+  }
   const prisma = getPrismaClient(c)
 
 

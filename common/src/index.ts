@@ -9,13 +9,13 @@ export const signupInput = z.object({
 
 export type SignupInput = z.infer<typeof signupInput>
 
-export const singinInput = z.object({
+export const signinInput = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 })
 
 
-export type SigninInput = z.infer<typeof singinInput>
+export type SigninInput = z.infer<typeof signinInput>
 
 export const createBlog = z.object({
   title: z.string(),

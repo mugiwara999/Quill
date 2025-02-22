@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client/edge"
-
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
+import { signupInput, signinInput } from "@rahulkoyye/medium-common"
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -20,7 +20,26 @@ const getPrismaClient = (c: any) => new PrismaClient({
 
 userRouter.post("/signup", async (c) => {
   const prisma = getPrismaClient(c)
-  const body = await c.req.json()
+  let body
+  try {
+
+    body = await c.req.json()
+  } catch (error) {
+    c.status(411)
+    return c.json({ error: "json parsing failed" })
+
+  }
+  const parsed = signupInput.safeParse(body);
+
+  if (!parsed.success) {
+
+    c.status(411)
+    return c.json({
+      msg: "send the right input"
+    })
+
+  }
+
 
   try {
     const user = await prisma.user.create({
@@ -41,8 +60,25 @@ userRouter.post("/signup", async (c) => {
 
 userRouter.post("/signin", async (c) => {
   const prisma = getPrismaClient(c)
-  const body = await c.req.json()
+  let body;
+  try {
 
+    body = await c.req.json()
+  } catch (e) {
+
+    console.error(e)
+    return c.json({ error: "json parsing failed" }, 500)
+  }
+
+  const parsed = signinInput.safeParse(body);
+
+  if (!parsed.success) {
+
+    c.status(411)
+    return c.json({
+      msg: "send the right inputs"
+    })
+  }
   try {
     const user = await prisma.user.findFirst({
       where: {
