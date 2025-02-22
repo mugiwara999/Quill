@@ -23,25 +23,25 @@ const getPrismaClient = (c: any) => new PrismaClient({
 }).$extends(withAccelerate())
 
 
-// blogRouter.use("/*", async (c, next) => {
-//
-//
-//   const token = c.req.header("Authorization") || "";
-//
-//
-//   const response = await verify(token, c.env.JWT_PASSWORD);
-//
-//   if (response) {
-//
-//     c.set("userId", response.id as string)
-//     await next();
-//
-//   } else {
-//     c.status(403);
-//     return c.json({ "msg": "unauthorized" })
-//   }
-//
-// })
+blogRouter.use("/*", async (c, next) => {
+
+
+  const token = c.req.header("Authorization") || "";
+
+
+  const response = await verify(token, c.env.JWT_PASSWORD);
+
+  if (response) {
+
+    c.set("userId", response.id as string)
+    await next();
+
+  } else {
+    c.status(403);
+    return c.json({ "msg": "unauthorized" })
+  }
+
+})
 
 
 blogRouter.get("/", async (c) => {
