@@ -52,10 +52,11 @@ blogRouter.get("/", async (c) => {
 
   try {
 
-    const body = await c.req.json()
+    const id = c.req.query("id")
+
     const post = await prisma.blog.findFirst({
       where: {
-        id: body.id
+        id: id
       }
     })
 
