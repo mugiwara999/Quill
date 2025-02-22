@@ -44,7 +44,7 @@ blogRouter.use("/*", async (c, next) => {
 })
 
 
-blogRouter.get("/", async (c) => {
+blogRouter.get("/:id", async (c) => {
 
 
 
@@ -52,7 +52,7 @@ blogRouter.get("/", async (c) => {
 
   try {
 
-    const id = c.req.query("id")
+    const id = c.req.param("id")
 
     const post = await prisma.blog.findFirst({
       where: {
