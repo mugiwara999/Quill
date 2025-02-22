@@ -44,31 +44,6 @@ blogRouter.use("/*", async (c, next) => {
 })
 
 
-blogRouter.get("/:id", async (c) => {
-
-  const prisma = getPrismaClient(c)
-
-  try {
-
-    const id = Number(c.req.param("id"))
-
-    const post = await prisma.blog.findFirst({
-      where: {
-        id
-      }
-    })
-
-    return c.json({
-      post
-    })
-  } catch (e) {
-    c.status(411)
-    return c.json({
-      msg: "Error while fetching"
-    })
-
-  }
-})
 
 blogRouter.post("/", async (c) => {
 
@@ -127,6 +102,32 @@ blogRouter.get("/bulk", async (c) => {
 
     return c.json({
       posts
+    })
+  } catch (e) {
+    c.status(411)
+    return c.json({
+      msg: "Error while fetching"
+    })
+
+  }
+})
+
+blogRouter.get("/:id", async (c) => {
+
+  const prisma = getPrismaClient(c)
+
+  try {
+
+    const id = c.req.param("id")
+
+    const post = await prisma.blog.findFirst({
+      where: {
+        id: Number(id)
+      }
+    })
+
+    return c.json({
+      post
     })
   } catch (e) {
     c.status(411)
